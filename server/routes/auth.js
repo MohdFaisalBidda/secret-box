@@ -64,21 +64,19 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/reset", authenticateJwt, async (req, res) => {
+router.post("/reset", async (req, res) => {
   try {
-    const { currPassword, newPassword } = req.body;
-    const userId = req.user.id;
-
-    const user = await User.findById(userId);
+    const { username, currPassword, newPassword } = req.body;
+    const user = await User.findOne({ username });
 
     if (!user) {
-      res.status(404).json("User not Found");
+      res.status(404).json("User does not exists!");
     }
 
     const matchedPass = await bcrypt.compare(currPassword, user.password);
 
     if (!matchedPass) {
-      res.status(406).json("Current Password is incorrect!");
+      res.status(406).json("Password is incorrect!");
       return;
     }
 
