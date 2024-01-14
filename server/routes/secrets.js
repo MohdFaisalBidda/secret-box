@@ -1,0 +1,122 @@
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const User = require("../model/UserModel");
+const bcrypt = require("bcrypt");
+const authenticateJwt = require("../middleware/authenticatJwt");
+
+const router = require("express").Router();
+
+router.get("/all", async (req, res) => {
+  try {
+    const users = await User.find({}, "secret");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json("Internal Server Error");
+  }
+});
+
+router.post("/post-secret", authenticateJwt, async (req, res) => {
+  try {
+    const { secret } = req.body;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json("User Not Found!");
+      return;
+    }
+
+    if (user.secret) {
+      res.status(200).json("Already Posted the secret!");
+      return;
+    }
+    user.secret = secret;
+
+    await user.save();
+
+    res.status(200).json("Secret Posted Successfully!");
+  } catch (error) {
+    res.status(500).json("Error Posting Secret");
+  }
+});
+
+// router.post("/register", async (req, res) => {
+//   const { username, password } = req.body;
+//   const userExists = await User.findOne({ username });
+//   if (userExists) {
+//     res.status(406).json("User already exists!");
+//   }
+
+//   const salt = bcrypt.genSaltSync(10);
+//   const hashedPass = await bcrypt.hash(password, salt);
+
+//   const newUser = await new User({
+//     username,
+//     password: hashedPass,
+//   });
+
+//   try {
+//     const saveUser = await newUser.save();
+//     res.status(201).json(saveUser);
+//   } catch (error) {
+//     res.status(500).json("Error registering user");
+//   }
+// });
+
+// router.post("/login", async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
+//     const findUser = await User.findOne({ username });
+
+//     if (!findUser) {
+//       res.status(404).json("User not Found");
+//       return;
+//     }
+
+//     const matchedPass = await bcrypt.compare(password, findUser.password);
+//     if (!matchedPass) {
+//       res.status(406).json("Invalid Credentials!");
+//       return;
+//     }
+
+//     const token = jwt.sign(
+//       { id: findUser._id, username: findUser.username },
+//       process.env.JWT_SECRET
+//     );
+//     res.status(200).json({ ...findUser._doc, token });
+//   } catch (error) {
+//     res.status(500).json("Invalid Credentials!");
+//   }
+// });
+
+// router.post("/reset", authenticateJwt, async (req, res) => {
+//   try {
+//     const { currPassword, newPassword } = req.body;
+//     const userId = req.user.id;
+
+//     const user = await User.findById(userId);
+
+//     if (!user) {
+//       res.status(404).json("User not Found");
+//     }
+
+//     const matchedPass = await bcrypt.compare(currPassword, user.password);
+
+//     if (!matchedPass) {
+//       res.status(406).json("Current Password is incorrect!");
+//       return;
+//     }
+
+//     const salt = bcrypt.genSaltSync(10);
+//     const hashedPass = bcrypt.hashSync(newPassword, salt);
+//     user.password = hashedPass;
+//     await user.save();
+
+//     res.status(200).json("Password Changed Succesfully!");
+//   } catch (error) {
+//     res.status(500).json("Error Changing password");
+//   }
+// });
+
+module.exports = router;
