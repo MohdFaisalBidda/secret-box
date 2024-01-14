@@ -1,9 +1,9 @@
-import axois from "axois";
+import axios from "axios";
 
-const API_URL = "http://localhost:3001";
+// const API_URL = "http://localhost:3001/api/";
 
-const api = axois.create({
-  baseUrl: API_URL,
+const api = axios.create({
+  baseUrl: "",
   Headers: {
     "Content-type": "application/json",
   },

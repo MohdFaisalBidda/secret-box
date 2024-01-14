@@ -5,25 +5,36 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import Login from "./Components/auth/Login";
 import Register from "./Components/auth/Register";
 import { UserContext } from "./context/UserProvider";
 import { useContext } from "react";
+import PasswordReset from "./Components/auth/PasswordReset";
 
 function App() {
   const { user } = useContext(UserContext);
+  console.log(user);
+
   return (
     <Router>
       <Routes>
-        {!user ? (
+        {user == null && (
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/reset" element={<PasswordReset />} />
             <Route path="/*" element={<Navigate to="/login" />} />
           </>
-        ) : (
-          <Route path="/" element={<Home/>} />
+        )}
+        {user && (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="/register" element={<Navigate to="/" />} />
+            <Route path="/reset" element={<Navigate to="/" />} />
+          </>
         )}
       </Routes>
     </Router>

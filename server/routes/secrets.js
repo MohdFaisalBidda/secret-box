@@ -35,7 +35,7 @@ router.post("/post-secret", authenticateJwt, async (req, res) => {
 
     await user.save();
 
-    res.status(200).json("Secret Posted Successfully!");
+    res.status(201).json("Secret Posted Successfully!");
   } catch (error) {
     res.status(500).json("Error Posting Secret");
   }
