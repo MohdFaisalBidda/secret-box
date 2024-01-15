@@ -6,6 +6,7 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -16,6 +17,7 @@ const UserProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
+      setIsLoading(true);
       const res = await api.post(
         `${process.env.REACT_APP_API_URL}/auth/login`,
         userData
@@ -24,7 +26,9 @@ const UserProvider = ({ children }) => {
       setUser(res.data);
       localStorage.setItem("token", res.data.token);
       toast.success("Logged In Successfully!");
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
       toast.error(error.response.data);
     }
@@ -36,7 +40,7 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout,isLoading }}>
       {children}
     </UserContext.Provider>
   );

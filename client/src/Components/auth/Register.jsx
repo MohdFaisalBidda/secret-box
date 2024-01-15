@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import api from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import loginImg from "../../images/login.jpg";
+import registerImg from "../../images/login.jpg";
 
 function Register() {
   const [cred, setCred] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const res = await api.post(
         `${process.env.REACT_APP_API_URL}/auth/register`,
         cred
@@ -22,10 +24,13 @@ function Register() {
       } else {
         toast.error("Something Went Wrong");
       }
+      setIsLoading(false);
       console.log("cred: ", cred);
     } catch (error) {
-      toast.error(error.response.data)
+      toast.error(error.response.data);
       console.log(error.response);
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -115,13 +120,32 @@ function Register() {
                 type="submit"
                 class="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white border hover:border-black focus:outline-none focus:ring-2"
               >
-                <span class="w-full">Submit</span>
+                <span class="w-full">
+                  {isLoading ? (
+                    <svg
+                      className="mx-auto animate-spin"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      height="25px"
+                      width="25px"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                    </svg>
+                  ) : (
+                    "Submit"
+                  )}
+                </span>
               </button>
             </form>
             <div class="pt-12 pb-12 text-center">
               <p>
                 Already have an account?
-                <Link to={"/login"} class="font-semibold underline">
+                <Link to={"/login"} class="font-semibold underline ml-2">
                   Login here.
                 </Link>
               </p>
@@ -131,7 +155,7 @@ function Register() {
         <div class="w-1/2 shadow-2xl">
           <img
             class="hidden object-cover w-full h-screen md:block"
-            src={loginImg}
+            src={registerImg}
           />
         </div>
       </div>

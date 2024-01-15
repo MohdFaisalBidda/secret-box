@@ -72,6 +72,7 @@ router.post("/reset", async (req, res) => {
 
     if (!user) {
       res.status(404).json("User does not exists!");
+      return;
     }
 
     const matchedPass = await bcrypt.compare(currPassword, user.password);

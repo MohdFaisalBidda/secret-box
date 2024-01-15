@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../context/UserProvider";
 import { Link } from "react-router-dom";
-import loginImg from "../../images/login.jpg";
+import loginImg from "../../images/login1.jpg";
 
 function Login() {
   const [cred, setCred] = useState({ username: "", password: "" });
-  const { login } = useContext(UserContext);
+  const { login, isLoading } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ function Login() {
                   />
                 </div>
               </div>
-              <div class="flex flex-col pt-4 mb-12">
+              <div class="flex flex-col pt-4 mb-4">
                 <div class="flex relative ">
                   <span class=" inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
                     <svg
@@ -105,17 +105,41 @@ function Login() {
                   />
                 </div>
               </div>
+              <div class="mb-12">
+                <Link to="/reset" class="underline ml-2">
+                  Forgot Password ?
+                </Link>
+              </div>
               <button
                 type="submit"
-                class="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"
+                class="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black border hover:border-black hover:bg-white focus:outline-none focus:ring-2"
               >
-                <span class="w-full">Submit</span>
+                <span class="w-full">
+                  {isLoading ? (
+                    <svg
+                      className="mx-auto animate-spin"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      height="25px"
+                      width="25px"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                    </svg>
+                  ) : (
+                    "Submit"
+                  )}
+                </span>
               </button>
             </form>
             <div class="pt-12 pb-12 text-center">
               <p>
                 Don&#x27;t have an account?
-                <Link to="/register" class="font-semibold underline">
+                <Link to="/register" class="font-semibold underline ml-2">
                   Register here.
                 </Link>
               </p>
