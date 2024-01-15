@@ -26,7 +26,7 @@ const UserProvider = ({ children }) => {
       toast.success("Logged In Successfully!");
     } catch (error) {
       console.log(error);
-      toast.error("Error Logging In");
+      toast.error(error.response.data);
     }
   };
 

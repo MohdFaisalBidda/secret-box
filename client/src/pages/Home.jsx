@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserProvider";
 import api from "../services/api";
 import { toast } from "react-toastify";
@@ -6,8 +6,23 @@ import axios from "axios";
 
 function Home() {
   const { logout } = useContext(UserContext);
+  const [allSecrets, setAllSecrets] = useState([]);
   const [secret, setsecret] = useState("");
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    try {
+      const fetchSecrets = async () => {
+        const res = await api.get(
+          `${process.env.REACT_APP_API_URL}/secrets/all`
+        );
+        setAllSecrets(res.data);
+      };
+      fetchSecrets();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const handleSubmitSecret = async (e) => {
     e.preventDefault();
@@ -56,6 +71,12 @@ function Home() {
       >
         Logout
       </button>
+
+      {allSecrets.map((item)=>(
+        <>
+        <h1>{item.secret}</h1>
+        </>
+      ))}
     </div>
   );
 }
