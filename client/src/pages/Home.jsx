@@ -3,6 +3,7 @@ import { UserContext } from "../context/UserProvider";
 import api from "../services/api";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Navbar from "../Components/Navbar";
 
 function Home() {
   const { logout } = useContext(UserContext);
@@ -52,6 +53,7 @@ function Home() {
 
   return (
     <div>
+      <Navbar/>
       <form onSubmit={handleSubmitSecret}>
         <input
           name="secret"

@@ -12,7 +12,6 @@ import Register from "./Components/auth/Register";
 import { UserContext } from "./context/UserProvider";
 import { useContext } from "react";
 import PasswordReset from "./Components/auth/PasswordReset";
-import HomeDemo from "./Components/HomeDemo";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -25,7 +24,6 @@ function App() {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/homedemo" element={<HomeDemo />} />
             <Route path="/reset" element={<PasswordReset />} />
             <Route path="/*" element={<Navigate to="/login" />} />
           </>
