@@ -30,7 +30,7 @@ function PasswordReset() {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data );
+      toast.error(error.response.data);
     } finally {
       setIsLoading(false);
     }
@@ -68,6 +68,7 @@ function PasswordReset() {
                     </svg>
                   </span>
                   <input
+                    required
                     name="username"
                     value={resetCred.username}
                     onChange={(e) =>
@@ -94,6 +95,7 @@ function PasswordReset() {
                     </svg>
                   </span>
                   <input
+                    required
                     name="currPassword"
                     value={resetCred.currPassword}
                     onChange={(e) =>
@@ -123,6 +125,7 @@ function PasswordReset() {
                     </svg>
                   </span>
                   <input
+                    required
                     name="newPassword"
                     value={resetCred.newPassword}
                     onChange={(e) =>
