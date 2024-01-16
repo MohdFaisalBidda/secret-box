@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserProvider";
-import api from "../services/api";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import Modal from "../Components/Modal";
 import SecretCard from "../Components/SecretCards";
+import axios from "axios";
 
 function Home() {
   const [allSecrets, setAllSecrets] = useState([]);
@@ -12,12 +10,13 @@ function Home() {
   const token = localStorage.getItem("token");
   const parsedToken = JSON.parse(token);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     try {
       const fetchSecrets = async () => {
-        const res = await api.get(
-          `${process.env.REACT_APP_API_URL}/secrets/all`
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/secrets/all`
         );
         setAllSecrets(res.data);
       };
@@ -42,7 +41,7 @@ function Home() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar setSearch={setSearch} search={search} />
       <div className="container mx-auto p-8 w-fit">
         <h1 className="text-4xl font-bold mb-4 text-center">
           Hii👋 {currentUser}
@@ -71,11 +70,13 @@ function Home() {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-content-center items-center px-14 w-full gap-20 my-10 max-w-full">
-        {allSecrets.map((secretItem) => {
-          if (secretItem.secret) {
-            return <SecretCard key={secretItem._id} secret={secretItem} />;
-          }
-        })}
+        {allSecrets
+          .filter((item) => item.secret.includes(search))
+          .map((secretItem) => {
+            if (secretItem.secret) {
+              return <SecretCard key={secretItem._id} secret={secretItem} />;
+            }
+          })}
       </div>
     </div>
   );

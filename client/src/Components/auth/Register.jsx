@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import api from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import registerImg from "../../images/login.jpg";
+import axios from "axios";
 
 function Register() {
   const [cred, setCred] = useState({ username: "", password: "" });
@@ -14,8 +14,8 @@ function Register() {
 
     try {
       setIsLoading(true);
-      const res = await api.post(
-        `${process.env.REACT_APP_API_URL}/auth/register`,
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/register`,
         cred
       );
       if (res.status === 201) {
@@ -29,36 +29,17 @@ function Register() {
     } catch (error) {
       toast.error(error.response.data);
       console.log(error.response);
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div>
-      {/* <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="username"
-          type="Username"
-          value={cred.username}
-          onChange={(e) => setCred({ ...cred, username: e.target.value })}
-        />
-        <input
-          name="password"
-          type="Password"
-          value={cred.password}
-          onChange={(e) => setCred({ ...cred, password: e.target.value })}
-        />
-        <button type="submit">Submit</button>
-      </form> */}
-
       <div class="flex flex-wrap w-full">
         <div class="flex flex-col w-full md:w-1/2 h-screen">
           <div class="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
-            <a href="#" class="p-4 text-xl font-bold text-white bg-black">
-              SecretBox.
-            </a>
+            <a class="p-4 text-xl font-bold text-white bg-black">SecretBox.</a>
           </div>
           <div class="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
             <p class="text-3xl text-center">Register</p>
@@ -78,6 +59,7 @@ function Register() {
                     </svg>
                   </span>
                   <input
+                    required
                     name="username"
                     value={cred.username}
                     onChange={(e) =>
@@ -104,6 +86,7 @@ function Register() {
                     </svg>
                   </span>
                   <input
+                    required
                     name="password"
                     value={cred.password}
                     onChange={(e) =>
@@ -154,6 +137,7 @@ function Register() {
         </div>
         <div class="w-1/2 shadow-2xl">
           <img
+            alt="img"
             class="hidden object-cover w-full h-screen md:block"
             src={registerImg}
           />

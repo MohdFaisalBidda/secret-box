@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import api from "../../services/api";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import resetImg from "../../images/reset.jpg";
+import axios from "axios";
 
 function PasswordReset() {
   const navigate = useNavigate();
@@ -17,8 +17,8 @@ function PasswordReset() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const res = await api.post(
-        `${process.env.REACT_APP_API_URL}/auth/reset`,
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/reset`,
         resetCred
       );
 
@@ -37,34 +37,6 @@ function PasswordReset() {
   };
   return (
     <div>
-      {/* <h1>Reset Password</h1>
-        <form onSubmit={handleReset}>
-          <input
-            name="username"
-            type="Username"
-            value={resetCred.username}
-            onChange={(e) =>
-              setResetCred({ ...resetCred, username: e.target.value })
-            }
-          />
-          <input
-            name="currPassword"
-            type="Current Password"
-            value={resetCred.currPassword}
-            onChange={(e) =>
-              setResetCred({ ...resetCred, currPassword: e.target.value })
-            }
-          />
-          <input
-            name="newPassword"
-            type="New Password"
-            value={resetCred.newPassword}
-            onChange={(e) =>
-              setResetCred({ ...resetCred, newPassword: e.target.value })
-            }
-          />
-          <button type="submit">Reset Password</button>
-        </form> */}
       <div class="flex flex-wrap w-full">
         <div class="w-1/2 shadow-2xl">
           <img

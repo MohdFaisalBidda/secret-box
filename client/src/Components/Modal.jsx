@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../services/api";
+import axios from "axios"
 import { toast } from "react-toastify";
 
 const Modal = ({ isOpen, onClose, onNewSecret }) => {
@@ -10,8 +10,8 @@ const Modal = ({ isOpen, onClose, onNewSecret }) => {
   const handleSubmitSecret = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post(
-        `${process.env.REACT_APP_API_URL}/secrets/post-secret`,
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/secrets/post-secret`,
         { secret: secret },
         {
           headers: {
@@ -27,14 +27,12 @@ const Modal = ({ isOpen, onClose, onNewSecret }) => {
           JSON.stringify({ ...parsedToken, secret: secret })
         );
         onNewSecret(res.data);
-        console.log(res.data);
       } else if (res.status === 200) {
         toast.error("Already Posted the secret!");
       } else {
         toast.error("Something Went Wrong");
       }
     } catch (error) {
-      console.log(error);
       toast.error("Error posting secret");
     } finally {
       onClose();

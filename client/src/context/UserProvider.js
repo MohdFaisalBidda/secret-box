@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import api from "../services/api";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export const UserContext = createContext();
 
@@ -18,11 +18,10 @@ const UserProvider = ({ children }) => {
   const login = async (userData) => {
     try {
       setIsLoading(true);
-      const res = await api.post(
-        `${process.env.REACT_APP_API_URL}/auth/login`,
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/login`,
         userData
       );
-      console.log("data from provider", res.data);
       setUser(res.data);
       localStorage.setItem("token", JSON.stringify(res.data));
       toast.success("Logged In Successfully!");

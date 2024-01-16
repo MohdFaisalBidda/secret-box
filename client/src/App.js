@@ -15,7 +15,6 @@ import PasswordReset from "./Components/auth/PasswordReset";
 
 function App() {
   const { user } = useContext(UserContext);
-  console.log(user);
 
   return (
     <Router>

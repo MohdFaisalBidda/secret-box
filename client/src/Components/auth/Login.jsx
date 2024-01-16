@@ -11,7 +11,6 @@ function Login() {
     e.preventDefault();
     try {
       await login(cred);
-      console.log("cred: ", cred);
     } catch (error) {
       console.log(error);
     }
@@ -19,33 +18,17 @@ function Login() {
 
   return (
     <div>
-      {/* <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="username"
-          type="Username"
-          value={cred.username}
-          onChange={(e) => setCred({ ...cred, username: e.target.value })}
-        />
-        <input
-          name="password"
-          type="Password"
-          value={cred.password}
-          onChange={(e) => setCred({ ...cred, password: e.target.value })}
-        />
-        <button type="submit">Submit</button>
-      </form>
-      <Link to="/reset">Reset password</Link> */}
       <div class="flex flex-wrap w-full">
         <div class="w-1/2 shadow-2xl">
           <img
+          alt="img"
             class="hidden object-cover w-full h-screen md:block"
             src={loginImg}
           />
         </div>
         <div class="flex flex-col w-full md:w-1/2 h-screen">
           <div class="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
-            <a href="#" class="p-4 text-xl font-bold text-white bg-black">
+            <a class="p-4 text-xl font-bold text-white bg-black">
               SecretBox.
             </a>
           </div>
@@ -67,6 +50,7 @@ function Login() {
                     </svg>
                   </span>
                   <input
+                  required
                     name="username"
                     value={cred.username}
                     onChange={(e) =>
@@ -93,6 +77,7 @@ function Login() {
                     </svg>
                   </span>
                   <input
+                  required
                     name="password"
                     value={cred.password}
                     onChange={(e) =>
