@@ -70,10 +70,12 @@ function Home() {
           onNewSecret={handleNewSecret}
         />
       </div>
-      <div className="">
-        {allSecrets.map((secretItem) => (
-          <SecretCard key={secretItem._id} secret={secretItem} />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-content-center items-center px-14 w-full gap-20 my-10 max-w-full">
+        {allSecrets.map((secretItem) => {
+          if (secretItem.secret) {
+            return <SecretCard key={secretItem._id} secret={secretItem} />;
+          }
+        })}
       </div>
     </div>
   );

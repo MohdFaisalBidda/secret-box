@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../context/UserProvider";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [showNav, setShowNav] = useState(false);
@@ -11,12 +12,12 @@ function Navbar() {
           <div className="flex items-center justify-between h-24">
             <div className=" flex items-center">
               <div className="flex justify-center md:justify-start">
-                <a
-                  href="#"
+                <Link
+                  href="/"
                   className="p-2 text-xl font-bold text-black bg-white"
                 >
                   SecretBox.
-                </a>
+                </Link>
               </div>
             </div>
             <div className="hidden md:block">
