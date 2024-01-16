@@ -2,14 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserProvider";
 import api from "../services/api";
 import { toast } from "react-toastify";
-import axios from "axios";
 import Navbar from "../Components/Navbar";
+import Modal from "../Components/Modal";
+import SecretCard from "../Components/SecretCards";
 
 function Home() {
-  const { logout } = useContext(UserContext);
   const [allSecrets, setAllSecrets] = useState([]);
-  const [secret, setsecret] = useState("");
+  const [currentUser, setCurrUser] = useState("");
   const token = localStorage.getItem("token");
+  const parsedToken = JSON.parse(token);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -23,62 +25,56 @@ function Home() {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+    setCurrUser(parsedToken.username);
+  }, [parsedToken.secret]);
 
-  const handleSubmitSecret = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await api.post(
-        `${process.env.REACT_APP_API_URL}/secrets/post-secret`,
-        { secret: secret },
-        {
-          headers: {
-            token: `Bearer ${token}`,
-          },
-        }
-      );
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
 
-      if (res.status === 201) {
-        toast.success("Secret posted successfully!");
-      } else if (res.status === 200) {
-        toast.error("Already Posted the secret!");
-      } else {
-        toast.error("Something Went Wrong");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error posting secret");
-    }
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleNewSecret = (newSecret) => {
+    setAllSecrets((prevSecrets) => [newSecret, ...prevSecrets]);
   };
 
   return (
     <div>
-      <Navbar/>
-      <form onSubmit={handleSubmitSecret}>
-        <input
-          name="secret"
-          type="text"
-          value={secret}
-          onChange={(e) => setsecret(e.target.value)}
+      <Navbar />
+      <div className="container mx-auto p-8 w-fit">
+        <h1 className="text-4xl font-bold mb-4 text-center">
+          Hii👋 {currentUser}
+        </h1>
+        <h1 className="text-4xl font-bold mb-4 text-center">
+          Welcome to SecretBox
+        </h1>
+        <p className="text-lg mb-8 w-fit">
+          Share your secrets anonymously and discover what others are hiding!
+        </p>
+        <button
+          onClick={handleOpenModal}
+          disabled={parsedToken.secret}
+          className={`text-white rounded-lg p-3 w-full ${
+            parsedToken.secret ? "bg-black/50" : "bg-black cursor-pointer"
+          }`}
+        >
+          <span className="text-lg font-bold">
+            {parsedToken.secret ? "Already Shared the secret!" : "Share Secret"}
+          </span>
+        </button>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onNewSecret={handleNewSecret}
         />
-        <button type="submit">Submit</button>
-      </form>
-      <br />
-      <br />
-      <br />
-      <button
-        onClick={() => {
-          logout();
-        }}
-      >
-        Logout
-      </button>
-
-      {allSecrets.map((item)=>(
-        <>
-        <h1>{item.secret}</h1>
-        </>
-      ))}
+      </div>
+      <div className="">
+        {allSecrets.map((secretItem) => (
+          <SecretCard key={secretItem._id} secret={secretItem} />
+        ))}
+      </div>
     </div>
   );
 }

@@ -13,7 +13,7 @@ function Navbar() {
               <div className="flex justify-center md:justify-start">
                 <a
                   href="#"
-                  className="p-4 text-xl font-bold text-black bg-white"
+                  className="p-2 text-xl font-bold text-black bg-white"
                 >
                   SecretBox.
                 </a>

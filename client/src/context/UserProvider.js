@@ -24,7 +24,7 @@ const UserProvider = ({ children }) => {
       );
       console.log("data from provider", res.data);
       setUser(res.data);
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", JSON.stringify(res.data));
       toast.success("Logged In Successfully!");
       setIsLoading(false);
     } catch (error) {
@@ -40,7 +40,7 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout,isLoading }}>
+    <UserContext.Provider value={{ user, login, logout, isLoading }}>
       {children}
     </UserContext.Provider>
   );
